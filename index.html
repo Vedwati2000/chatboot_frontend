@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gemini Chatbot</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+  <div class="chat-wrap container">
+    <header>
+      <div class="logo">AI</div>
+      <div>
+        <div class="title">Gemini Chatbot</div>
+        <div class="small">Ask anything — I'll do my best!</div>
+      </div>
+    </header>
+
+    <div class="messages d-flex flex-column" id="messages">
+
+    </div>
+
+    <div class="input-row">
+      <input id="prompt" type="text" class="form-control" placeholder="Type your question..." />
+      <button id="sendBtn" class="btn">Send</button>
+    </div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
