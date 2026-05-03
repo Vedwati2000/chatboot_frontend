@@ -1,18 +1,18 @@
 const messagesEl = document.getElementById("messages");
-    const input = document.getElementById("prompt");
-    const sendBtn = document.getElementById("sendBtn");
+const input = document.getElementById("prompt");
+const sendBtn = document.getElementById("sendBtn");
 
-    let conversation = [];
+let conversation = [];
 
-    function appendMessage(text, who = "bot") {
-      const div = document.createElement("div");
-      div.className = "msg " + (who === "user" ? "user" : "bot");
-      div.innerHTML = text;
-      messagesEl.appendChild(div);
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-    }
+function appendMessage(text, who = "bot") {
+  const div = document.createElement("div");
+  div.className = "msg " + (who === "user" ? "user" : "bot");
+  div.innerHTML = text;
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
 
-    async function sendPrompt() {
+async function sendPrompt() {
   const userInput = input.value.trim();
   if (!userInput) return;
 
@@ -39,39 +39,39 @@ RULES:
 
   conversation.push({ role: "user", text: userInput });
 
-try {
-  const response = await fetch(
-    `http://localhost:3000/chat`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: systemInstruction }] 
-          },
-          ...conversation
-            .filter(msg => msg.role !== "system")
-            .map(m => ({
-              role: m.role === "model" ? "model" : "user",
-              parts: [{ text: m.text }]
-            }))
-        ]
-      }),
-    }
-  );
+  try {
+    const response = await fetch(
+      `https://backend-chatbot-phxn.onrender.com/chat`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: systemInstruction }]
+            },
+            ...conversation
+              .filter(msg => msg.role !== "system")
+              .map(m => ({
+                role: m.role === "model" ? "model" : "user",
+                parts: [{ text: m.text }]
+              }))
+          ]
+        }),
+      }
+    );
 
-  const data = await response.json();
-  console.log(data);
+    const data = await response.json();
+    console.log(data);
 
     if (data?.candidates?.length) {
       let reply = data.candidates[0].content.parts[0].text;
-      
-     
+
+
       reply = reply.replace(/\*/g, '');
-      
-      thinkingEl.innerHTML = reply.replace(/\n/g, '<br>'); 
+
+      thinkingEl.innerHTML = reply.replace(/\n/g, '<br>');
       conversation.push({ role: "model", text: reply });
     } else if (data?.error) {
       thinkingEl.innerHTML = `Error: ${data.error.message}`;
@@ -82,7 +82,7 @@ try {
     thinkingEl.innerHTML = "Error connecting to Gemini API. Please check your key or network.";
   }
 }
-    sendBtn.addEventListener("click", sendPrompt);
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") sendPrompt();
-    });
+sendBtn.addEventListener("click", sendPrompt);
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") sendPrompt();
+});
